@@ -10,13 +10,14 @@
                 exclude-result-prefixes="db f t m xs"
                 version="2.0">
 
-<xsl:import href="/projects/docbook/xslt20/xslt/base/html/chunk.xsl"/>
+<xsl:import href="../build/docbook/xslt/base/html/chunk.xsl"/>
 <xsl:import href="xproc.xsl"/>
 
 <xsl:param name="refentry.separator" select="0"/>
 <xsl:param name="resource.root" select="''"/>
 <xsl:param name="html.stylesheets" select="'css/xproc.css'"/>
 <xsl:param name="default.table.column.widths" select="0"/>
+<xsl:param name="syntax-highlighter" select="'1'"/>
 
 <xsl:param name="linenumbering" as="element()*">
 <ln path="literallayout" everyNth="2" width="3" separator=" " padchar=" " minlines="3"/>
@@ -271,6 +272,40 @@
   <div class="cover">
     <xsl:apply-templates select="."/>
   </div>
+</xsl:template>
+
+<xsl:template match="db:refsynopsisdiv">
+  <div>
+    <xsl:sequence select="f:html-attributes(.)"/>
+
+    <h2>
+      <xsl:choose>
+	<xsl:when test="db:info/db:title">
+	  <xsl:apply-templates select="db:info/db:title"
+			       mode="m:titlepage-mode"/>
+	</xsl:when>
+	<xsl:otherwise>
+	  <xsl:call-template name="gentext">
+            <xsl:with-param name="key" select="'RefSynopsisDiv'"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
+    </h2>
+    <xsl:apply-templates/>
+
+    <xsl:apply-templates
+        select="../db:refmeta/db:refmiscinfo[@class='version']"/>
+  </div>
+</xsl:template>
+
+<xsl:template match="db:refmiscinfo[@class='version']">
+  <p>
+    <xsl:text>Introduced in </xsl:text>
+    <productname>XML Calabash</productname>
+    <xsl:text> version </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>.</xsl:text>
+  </p>
 </xsl:template>
 
 </xsl:stylesheet>

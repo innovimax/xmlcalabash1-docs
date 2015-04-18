@@ -264,6 +264,7 @@
       <p:output port="result"/>
       <p:option name="fixup-xml-base" select="'false'" e:type="xsd:boolean"/>
       <p:option name="fixup-xml-lang" select="'false'" e:type="xsd:boolean"/>
+      <p:option name="cx:trim" select="'false'" e:type="xsd:boolean"/>
    </p:declare-step>
 
     <p:declare-step type="p:xslt">
@@ -409,14 +410,32 @@
       <p:output port="result"/>
    </p:declare-step>
 
+   <p:declare-step type="cx:ditaa">
+     <p:input port="source" sequence="true"/>
+     <p:output port="result" sequence="true"/>
+     <p:option name="shadows" select="true()" e:type="xsd:boolean"/>
+     <p:option name="antialias" select="true()" e:type="xsd:boolean"/>
+     <p:option name="corners" select="'square'" e:type="rounded|square"/>
+     <p:option name="separation" select="true()" e:type="xsd:boolean"/>
+     <p:option name="scale" e:type="xsd:float"/>
+     <p:option name="html" select="false()" e:type="xsd:boolean"/>
+   </p:declare-step>
+
    <p:declare-step type="cx:java-properties">
      <p:output port="result"/>
      <p:option name="href" e:type="xsd:anyURI"/>
    </p:declare-step>
 
+   <p:declare-step type="cx:mathml-to-svg">
+     <p:input port="source" sequence="false"/>
+     <p:input port="parameters" kind="parameter"/>
+     <p:output port="result" sequence="false"/>
+   </p:declare-step>
+
     <p:declare-step type="cx:message">
       <p:input port="source" sequence="true"/>
       <p:output port="result" sequence="true"/>
+      <p:option name="log" e:type="error|warn|info|debug|trace"/>
       <p:option name="message" required="true" e:type="xsd:string"/>
    </p:declare-step>
 
@@ -425,6 +444,29 @@
      <p:output port="result" sequence="true"/>
      <p:option name="max-triples-per-document" select="100" e:type="xsd:long"/>
    </p:declare-step>
+
+<p:declare-step type="cx:rdf-load">
+  <p:input port="source" sequence="true"/>
+  <p:output port="result" sequence="true"/>
+  <p:option name="href" required="true" e:type="xsd:anyURI"/>
+  <p:option name="language" e:type="xsd:string"/>
+  <p:option name="graph" e:type="xsd:string"/>
+  <p:option name="max-triples-per-document" select="100" e:type="xsd:long"/>
+</p:declare-step>
+
+<p:declare-step type="cx:rdf-store">
+  <p:input port="source" sequence="true"/>
+  <p:output port="result" primary="false"/>
+  <p:option name="href" e:type="xsd:anyURI"/>
+  <p:option name="language" e:type="xsd:string"/>
+  <p:option name="graph" e:type="xsd:string"/>
+</p:declare-step>
+
+<p:declare-step type="cx:sparql">
+  <p:input port="source" sequence="true" primary="true"/>
+  <p:input port="query"/>
+  <p:output port="result" sequence="true"/>
+</p:declare-step>
 
    <p:declare-step type="cx:wait-for-update">
      <p:output port="result"/>
@@ -436,6 +478,13 @@
    <p:declare-step type="cx:send-mail">
      <p:input port="source" sequence="true"/>
      <p:output port="result"/>
+   </p:declare-step>
+
+   <p:declare-step type="cx:plantuml">
+     <p:input port="source" sequence="true"/>
+     <p:output port="result" sequence="true"/>
+     <p:option name="format" select="'png'" e:type="png|svg"/>
+     <p:option name="html" select="false()" e:type="xsd:boolean"/>
    </p:declare-step>
 
     <p:declare-step type="cx:pretty-print">
